@@ -1,0 +1,20 @@
+language: java
+dist: trusty
+sudo: false
+
+notifications:
+  email: false
+
+jdk:
+- openjdk7
+
+cache:
+  directories:
+  - .autoconf
+  - $HOME/.m2
+
+addons:
+  sonarcloud:
+    organization: "omkar9999-github"
+
+script: mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar
