@@ -16,34 +16,42 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * FileWatcherService to be implemented 
- * to perform any action after the file event is detected
+ * FileWatcherService to be implemented to perform any action after the file
+ * event is detected
+ * 
  * @author Omkar Marathe
  * @since October 20,2018
  *
  */
 public class FileWatcher implements Runnable {
-	
-	 private WatchService watcher;
-	 private FileHandler fileHandler;
-	 private List<Kind<?>> watchedEvents;
+
+	private static final Logger LOGGER = Logger.getLogger(FileWatcher.class.getName());
+
+	private WatchService watcher;
+	private FileHandler fileHandler;
+	private List<Kind<?>> watchedEvents;
+	private Path directoryWatched;
 
 	/**
-	 * @param watcher @Path directory to watch files into
-	 * @param fileHandler @FileHandler implemented instance to handle the file event
+	 * @param directory       @Path directory to watch files into
+	 * @param fileHandler   @FileHandler implemented instance to handle the file
+	 *                      event
 	 * @param watchedEvents Set of file events watched
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	public FileWatcher(Path directory, FileHandler fileHandler, WatchEvent.Kind<?>... watchedEvents) throws IOException {
+	public FileWatcher(Path directory, FileHandler fileHandler, WatchEvent.Kind<?>... watchedEvents)
+			throws IOException {
 		super();
 		this.watcher = FileSystems.getDefault().newWatchService();
 		this.fileHandler = fileHandler;
+		this.directoryWatched = directory;
 		this.watchedEvents = Arrays.asList(watchedEvents);
-		directory.register(watcher,watchedEvents);
+		directory.register(watcher, watchedEvents);
 	}
-		
+
 	@SuppressWarnings({ "unchecked" })
 	public void run() {
+		LOGGER.log(Level.INFO,"Starting FileWatcher for {0}",directoryWatched.toAbsolutePath());
 		 while (true) {
 	            WatchKey key;
 	            try {
@@ -58,7 +66,7 @@ public class FileWatcher implements Runnable {
 	                Path fileName = ev.context();
 
 	                if (watchedEvents.contains(kind)) {
-	                	Logger.getLogger(this.getClass().getName()).log(Level.INFO,"Invoking handle on {}", fileName.toAbsolutePath());
+	                	LOGGER.log(Level.INFO,"Invoking handle on {0}", fileName.toAbsolutePath());
 	                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
 	                }
 	            }

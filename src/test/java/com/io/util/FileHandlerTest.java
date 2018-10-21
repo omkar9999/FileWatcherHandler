@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent.Kind;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.junit.Ignore;
 
@@ -24,6 +26,8 @@ import org.junit.Ignore;
 @Ignore
 public class FileHandlerTest implements FileHandler {
 
+	private static final Logger LOGGER = Logger.getLogger(FileHandlerTest.class.getName());
+	
 	/*
 	 * This implemented method will delete the file
 	 * 
@@ -31,7 +35,7 @@ public class FileHandlerTest implements FileHandler {
 	 * java.nio.file.WatchEvent.Kind)
 	 */
 	public void handle(File file, Kind<?> fileEvent) {
-		System.out.println("Handler is triggered");
+		LOGGER.log(Level.INFO,"Handler is triggered for file {0}",file.getPath());
 		if(fileEvent == StandardWatchEventKinds.ENTRY_CREATE) {
 			try {
 				boolean deleted = Files.deleteIfExists(Paths.get(file.getPath()));
