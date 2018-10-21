@@ -12,6 +12,8 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * FileWatcherService to be implemented 
@@ -56,7 +58,7 @@ public class FileWatcher implements Runnable {
 	                Path fileName = ev.context();
 
 	                if (watchedEvents.contains(kind)) {
-	                	System.out.println("Invoking handle on "+fileName.toAbsolutePath());
+	                	Logger.getLogger(this.getClass().getName()).log(Level.INFO,"Invoking handle on "+fileName.toAbsolutePath());
 	                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
 	                }
 	            }
