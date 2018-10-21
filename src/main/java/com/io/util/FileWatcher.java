@@ -58,7 +58,7 @@ public class FileWatcher implements Runnable {
 	                Path fileName = ev.context();
 
 	                if (watchedEvents.contains(kind)) {
-	                	Logger.getLogger(this.getClass().getName()).log(Level.INFO,"Invoking handle on "+fileName.toAbsolutePath());
+	                	Logger.getLogger(this.getClass().getName()).log(Level.INFO,"Invoking handle on {}", fileName.toAbsolutePath());
 	                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
 	                }
 	            }
