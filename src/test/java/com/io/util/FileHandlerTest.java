@@ -12,6 +12,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchEvent.Kind;
 
+import org.junit.Ignore;
+
 /**
  * This class is created to demonstrate 
  * FileHandler functionality
@@ -19,6 +21,7 @@ import java.nio.file.WatchEvent.Kind;
  * @since October 20,2018
  *
  */
+@Ignore
 public class FileHandlerTest implements FileHandler {
 
 	/*
@@ -30,7 +33,6 @@ public class FileHandlerTest implements FileHandler {
 	public void handle(File file, Kind<?> fileEvent) {
 		System.out.println("Handler is triggered");
 		if(fileEvent == StandardWatchEventKinds.ENTRY_CREATE) {
-			System.out.println("Deleting the file "+file.getAbsolutePath());
 			try {
 				boolean deleted = Files.deleteIfExists(Paths.get(file.getPath()));
 				assertTrue(deleted);
