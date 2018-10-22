@@ -56,21 +56,22 @@ public class FileWatcher implements Runnable {
 	            WatchKey key;
 	            try {
 	                key = watcher.take();
+	                for (WatchEvent<?> event : key.pollEvents()) {
+		                WatchEvent.Kind<?> kind = event.kind();
+
+		                WatchEvent<Path> ev = (WatchEvent<Path>) event;
+		                Path fileName = ev.context();
+
+		                if (watchedEvents.contains(kind)) {
+		                	LOGGER.log(Level.INFO,"Invoking handle on {0}", fileName.toAbsolutePath());
+		                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
+		                }
+		            }
+		            key.reset();
 	            } catch (InterruptedException ex) {
-	                return;
+	                LOGGER.log(Level.SEVERE,"Polling Thread was interrupted ",ex);
+	                Thread.currentThread().interrupt();
 	            }
-	            for (WatchEvent<?> event : key.pollEvents()) {
-	                WatchEvent.Kind<?> kind = event.kind();
-
-	                WatchEvent<Path> ev = (WatchEvent<Path>) event;
-	                Path fileName = ev.context();
-
-	                if (watchedEvents.contains(kind)) {
-	                	LOGGER.log(Level.INFO,"Invoking handle on {0}", fileName.toAbsolutePath());
-	                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
-	                }
-	            }
-	            key.reset();
 	        }
 	}
 
