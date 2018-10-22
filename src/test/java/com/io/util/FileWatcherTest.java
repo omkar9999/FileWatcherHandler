@@ -50,7 +50,7 @@ public class FileWatcherTest {
 		watcherThread = null;
 	}
 
-	@Test(timeout=5000)
+	@Test(timeout=900)
 	public void testFileHandler() throws IOException, InterruptedException {
 		watcherThread = new Thread(fileWatcher);
 		file = new File("Test.txt");
@@ -59,16 +59,16 @@ public class FileWatcherTest {
 		assertTrue(file.exists());
 	}
 	
-	@Test(timeout=5000)
+	@Test(timeout=900)
 	public void testFileWatcherStart() throws InterruptedException, IOException {
 		Thread watcherThread2 = new Thread(fileWatcher);
 		watcherThread2.start();
-		Thread.sleep(2000);
+		Thread.sleep(450);
 		File file2 = new File("Test1.txt");
 		file2.createNewFile();
 	}
 	
-	@Test(timeout=5000)
+	@Test(timeout=900)
 	public void testFileWatcherTestInterrupt() throws InterruptedException {
 		Thread watcherThread3 = new Thread(fileWatcher);
 		watcherThread3.start();
