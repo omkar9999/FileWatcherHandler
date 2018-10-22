@@ -33,7 +33,7 @@ public class FileWatcher implements Runnable {
 	private Path directoryWatched;
 
 	/**
-	 * @param directory       @Path directory to watch files into
+	 * @param directory     @Path directory to watch files into
 	 * @param fileHandler   @FileHandler implemented instance to handle the file
 	 *                      event
 	 * @param watchedEvents Set of file events watched
@@ -51,28 +51,30 @@ public class FileWatcher implements Runnable {
 
 	@SuppressWarnings({ "unchecked" })
 	public void run() {
-		LOGGER.log(Level.INFO,"Starting FileWatcher for {0}",directoryWatched.toAbsolutePath());
-		 while (true) {
-	            WatchKey key;
-	            try {
-	                key = watcher.take();
-	                for (WatchEvent<?> event : key.pollEvents()) {
-		                WatchEvent.Kind<?> kind = event.kind();
+		LOGGER.log(Level.INFO, "Starting FileWatcher for {0}", directoryWatched.toAbsolutePath());
+		WatchKey key = null;
+		while (true) {
+			try {
+				key = watcher.take();
+			} catch (InterruptedException ex) {
+				LOGGER.log(Level.SEVERE, "Polling Thread was interrupted ", ex);
+				Thread.currentThread().interrupt();
+			}
+			if (key != null) {
+				for (WatchEvent<?> event : key.pollEvents()) {
+					WatchEvent.Kind<?> kind = event.kind();
 
-		                WatchEvent<Path> ev = (WatchEvent<Path>) event;
-		                Path fileName = ev.context();
+					WatchEvent<Path> ev = (WatchEvent<Path>) event;
+					Path fileName = ev.context();
 
-		                if (watchedEvents.contains(kind)) {
-		                	LOGGER.log(Level.INFO,"Invoking handle on {0}", fileName.toAbsolutePath());
-		                    fileHandler.handle(fileName.toAbsolutePath().toFile(),kind);
-		                }
-		            }
-		            key.reset();
-	            } catch (InterruptedException ex) {
-	                LOGGER.log(Level.SEVERE,"Polling Thread was interrupted ",ex);
-	                Thread.currentThread().interrupt();
-	            }
-	        }
+					if (watchedEvents.contains(kind)) {
+						LOGGER.log(Level.INFO, "Invoking handle on {0}", fileName.toAbsolutePath());
+						fileHandler.handle(fileName.toAbsolutePath().toFile(), kind);
+					}
+				}
+				key.reset();
+			}
+		}
 	}
 
 }
