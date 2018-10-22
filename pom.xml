@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.io.util</groupId>
 	<artifactId>filewatcherhandler</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 
 	<dependencies>
 		<dependency>
