@@ -17,17 +17,19 @@ import org.junit.Test;
 
 /**
  * JUnit Test for FileWatcher
+ * 
  * @author Omkar Marathe
  * @since October 20,2018
  *
  */
 public class FileWatcherTest {
+
 	
-	FileWatcher fileWatcher;
 	FileHandlerTest fileHandlerTest;
 	Thread watcherThread;
 	Path path;
 	File file;
+	private FileWatcher fileWatcher;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -48,13 +50,29 @@ public class FileWatcherTest {
 		watcherThread = null;
 	}
 
-	@Test
-	public void testFileHandler() throws IOException {
+	@Test(timeout=5000)
+	public void testFileHandler() throws IOException, InterruptedException {
 		watcherThread = new Thread(fileWatcher);
 		file = new File("Test.txt");
+		watcherThread.start();
 		file.createNewFile();
 		assertTrue(file.exists());
-		watcherThread.start();
+	}
+	
+	@Test(timeout=5000)
+	public void testFileWatcherStart() throws InterruptedException, IOException {
+		Thread watcherThread2 = new Thread(fileWatcher);
+		watcherThread2.start();
+		Thread.sleep(2000);
+		File file2 = new File("Test1.txt");
+		file2.createNewFile();
+	}
+	
+	@Test(timeout=5000)
+	public void testFileWatcherTestInterrupt() throws InterruptedException {
+		Thread watcherThread3 = new Thread(fileWatcher);
+		watcherThread3.start();
+		watcherThread3.interrupt();
 	}
 
 }
