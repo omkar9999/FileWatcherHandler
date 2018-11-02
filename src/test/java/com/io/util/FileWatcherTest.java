@@ -36,7 +36,7 @@ public class FileWatcherTest {
 		fileHandlerTest = new FileHandlerTest();
 		path = Paths.get("");
 		path.toFile().mkdirs();
-		fileWatcher = new FileWatcher(path, fileHandlerTest,false,StandardWatchEventKinds.ENTRY_CREATE);
+		fileWatcher = new FileWatcher(path, fileHandlerTest,true,StandardWatchEventKinds.ENTRY_CREATE);
 	}
 
 	/**
