@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.io.util;
 
 import java.io.File;
@@ -19,7 +16,8 @@ public interface FileHandler {
 	 * Method is invoked post file event is detected
 	 * @param file
 	 * @param fileEvent
+	 * @throws InterruptedException
 	 */
-	void handle(File file,WatchEvent.Kind<?> fileEvent);
+	void handle(File file,WatchEvent.Kind<?> fileEvent) throws InterruptedException;
 
 }
