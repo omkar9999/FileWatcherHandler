@@ -46,16 +46,19 @@ public class FileHandlerTest implements FileHandler {
 FileHandlerTest fileHandlerTest = new FileHandlerTest();
 ```
 
-4) Create an instance of a FileWatcher by passing path,an instance of an Implemented [FileHandler](src/main/java/com/io/util/FileHandler.java) and types of file events that you want to monitor separated by commas.
+4) Create an instance of a FileWatcher by passing path,an instance of an Implemented [FileHandler](src/main/java/com/io/util/FileHandler.java)
+ and types of file events that you want to monitor separated by commas.
 
 ```java
-FileWatcher fileWatcher = new FileWatcher(path, fileHandlerTest,false, StandardWatchEventKinds.ENTRY_CREATE); //For non-recursive polling
+FileWatcher fileWatcher = new FileWatcher(path, fileHandlerTest,false, StandardWatchEventKinds.ENTRY_CREATE); 
+//For non-recursive polling
 ```
 OR
 
 ```java
-FileWatcher fileWatcher = new FileWatcher(path, fileHandlerTest,true, StandardWatchEventKinds.ENTRY_CREATE); //For recursive polling
-
+FileWatcher fileWatcher = new FileWatcher(path, fileHandlerTest,true, StandardWatchEventKinds.ENTRY_CREATE); 
+//For recursive polling
+```
 5) Now Create and start a new Thread.It is recommended to use ExecutorService.
 
 ```java
